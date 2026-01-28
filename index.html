@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Blonde Boost — Demo</title>
+  <style>
+    :root{--bg:#0b0b0b;--purple:#6A3AB1;--gold:#D4AF37;--yellow:#FFD24A;--muted:#888}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg),#0f0f0f);color:#fff}
+    .container{max-width:980px;margin:32px auto;padding:24px}
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .badge{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--purple),var(--gold));display:flex;align-items:center;justify-content:center;font-weight:700}
+    h1{margin:0;font-size:20px}
+    .balance{background:#111;padding:10px 14px;border-radius:10px;color:var(--yellow);font-weight:600}
+    .card{background:rgba(255,255,255,0.03);padding:18px;border-radius:12px;margin-bottom:16px}
+    .services{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .service{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);}
+    .service h3{margin:0 0 8px 0}
+    .btn{background:linear-gradient(90deg,var(--gold),var(--yellow));border:none;padding:10px 14px;border-radius:8px;color:#000;font-weight:700;cursor:pointer}
+    .muted{color:var(--muted)}
+    .row{display:flex;gap:12px;align-items:center}
+    input[type=range]{width:100%}
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+    .orders{max-height:200px;overflow:auto}
+    footer{margin-top:28px;color:var(--muted);font-size:13px}
+    .clicker{display:flex;gap:12px;align-items:center}
+    .big-btn{padding:18px 24px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--gold));border:none;color:#fff;font-weight:800;font-size:18px;cursor:pointer}
+    .ref{font-size:13px;color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo"><div class="badge">BB</div><div><h1>Blonde Boost — Demo</h1><div class="ref">Luxury Telegram growth (demo)</div></div></div>
+      <div style="text-align:right">
+        <div class="balance" id="balance">Баланс: 0 ₽</div>
+        <div class="ref" style="margin-top:6px">N‑coin: <span id="ncoin">0</span></div>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2>Услуги</h2>
+      <div class="services">
+        <div class="service" data-key="subscribers" data-price="0.01">
+          <h3>Подписчики</h3>
+          <div class="muted">0.01 ₽ за подписчика</div>
+        </div>
+        <div class="service" data-key="views" data-price="0.001">
+          <h3>Просмотры</h3>
+          <div class="muted">0.001 ₽ за просмотр</div>
+        </div>
+        <div class="service" data-key="reactions" data-price="0.001">
+          <h3>Реакции</h3>
+          <div class="muted">0.001 ₽ за реакцию</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h2 id="svc-title">Подписчики</h2>
+          <div class="muted">Цена за единицу: <span id="unit-price">0.01</span> ₽</div>
+          <div style="margin-top:12px">
+            <input type="range" id="qty-range" min="1" max="1000000" value="100" step="1">
+            <div class="row" style="margin-top:8px;justify-content:space-between"><input id="qty-input" type="number" min="1" max="1000000" value="100" style="width:160px;padding:8px;border-radius:8px;background:#0f0f0f;color:#fff;border:1px solid #222"> <div style="text-align:right">Итого: <strong id="total">1 ₽</strong></div></div>
+            <div style="margin-top:12px" class="row">
+              <button class="btn" id="buy-btn">Купить (mock)</button>
+              <button class="btn" id="topup-btn" style="background:linear-gradient(90deg,var(--purple),var(--gold));color:#fff">Пополнить (mock)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <h3>Clicker — N‑coin</h3>
+          <div class="clicker">
+            <button class="big-btn" id="clicker-btn">КЛИК</button>
+            <div>
+              <div class="muted">N‑coins: <strong id="ncoin-2">0</strong></div>
+              <div style="margin-top:8px">
+                <input id="exchange-amount" type="number" min="1000" placeholder="кол-во N‑coin" style="width:160px;padding:8px;border-radius:8px;background:#0f0f0f;color:#fff;border:1px solid #222">
+                <button class="btn" id="exchange-btn">Обменять</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <aside>
+        <div class="card">
+          <h3>Заказы</h3>
+          <div class="orders" id="orders"></div>
+        </div>
+        <div class="card" style="margin-top:12px">
+          <h3>Реферал</h3>
+          <div class="muted">Ваша реферальная ссылка:</div>
+          <div style="word-break:break-all;margin-top:6px"><a id="ref-link" href="#"></a></div>
+          <div style="margin-top:8px;color:var(--muted)">Реферальные начисления: <span id="ref-balance">0 ₽</span></div>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      Это демонстрация внешнего вида и базовой логики. Все платежи и данные — локальные (localStorage).
+    </footer>
+  </div>
+
+  <script>
+    // Utils
+    const ls = {
+      get(k, def){try{return JSON.parse(localStorage.getItem(k))}catch(e){return def}},
+      set(k,v){localStorage.setItem(k,JSON.stringify(v))}
+    }
+
+    // Initial state
+    let balance = ls.get('bb_balance',0);
+    let ncoin = ls.get('bb_ncoin',0);
+    let orders = ls.get('bb_orders',[]);
+    let refCode = ls.get('bb_refcode') || Math.random().toString(36).slice(2,9)
+    ls.set('bb_refcode', refCode)
+    let refBalances = ls.get('bb_ref_balances',{})
+
+    // Elements
+    const balanceEl = document.getElementById('balance')
+    const ncoinEl = document.getElementById('ncoin')
+    const ncoin2El = document.getElementById('ncoin-2')
+    const qtyRange = document.getElementById('qty-range')
+    const qtyInput = document.getElementById('qty-input')
+    const unitPriceEl = document.getElementById('unit-price')
+    const totalEl = document.getElementById('total')
+    const svcTitle = document.getElementById('svc-title')
+    const ordersEl = document.getElementById('orders')
+    const refLink = document.getElementById('ref-link')
+    const refBalEl = document.getElementById('ref-balance')
+
+    // Default service
+    let currentService = {key:'subscribers', price:0.01, title:'Подписчики'}
+
+    function renderHeader(){
+      balanceEl.textContent = `Баланс: ${balance.toFixed(2)} ₽`
+      ncoinEl.textContent = ncoin
+      ncoin2El.textContent = ncoin
+      refLink.href = window.location.origin + window.location.pathname + '?ref=' + refCode
+      refLink.textContent = refLink.href
+      refBalEl.textContent = ((refBalances[refCode]||0).toFixed? (refBalances[refCode]||0).toFixed(2): (refBalances[refCode]||0)) + ' ₽'
+    }
+
+    function renderService(){
+      svcTitle.textContent = currentService.title
+      unitPriceEl.textContent = currentService.price
+      qtyRange.value = 100
+      qtyInput.value = 100
+      updateTotal()
+    }
+
+    function updateTotal(){
+      let q = Number(qtyInput.value)||1
+      if(q < 1) q = 1
+      if(q > 1000000) q = 1000000
+      qtyInput.value = q
+      qtyRange.value = q
+      let tot = q * currentService.price
+      totalEl.textContent = tot.toFixed(2) + ' ₽'
+    }
+
+    // Service selection
+    document.querySelectorAll('.service').forEach(el=>{
+      el.addEventListener('click',()=>{
+        currentService = {key:el.dataset.key, price:Number(el.dataset.price), title: el.querySelector('h3').innerText}
+        renderService()
+      })
+    })
+
+    qtyRange.addEventListener('input',()=>{qtyInput.value = qtyRange.value; updateTotal()})
+    qtyInput.addEventListener('change',()=>{let v=Number(qtyInput.value); if(v>1000000) v=1000000; if(v<1) v=1; qtyInput.value=v; qtyRange.value=v; updateTotal()})
+
+    document.getElementById('topup-btn').addEventListener('click',()=>{
+      let amt = prompt('Сколько пополнить (RUB)?', '100')
+      amt = Number(amt)
+      if(!amt || amt<=0) return alert('Неверная сумма')
+      balance += amt
+      ls.set('bb_balance', balance)
+      renderHeader()
+      alert('Пополнение (mock) успешно')
+    })
+
+    document.getElementById('buy-btn').addEventListener('click',()=>{
+      let q = Number(qtyInput.value)||1
+      let total = q * currentService.price
+      if(confirm(`Купить ${q} ${currentService.title} за ${total.toFixed(2)} ₽?`)){ 
+        if(balance < total){
+          if(!confirm('Баланс недостаточен. Пополнить сейчас?')) return; else { document.getElementById('topup-btn').click(); return }
+        }
+        balance -= total
+        ls.set('bb_balance', balance)
+        // create order
+        const order = {id:Date.now(), svc:currentService.key, title:currentService.title, q:q, total: total.toFixed(2), status:'completed', created: new Date().toISOString()}
+        orders.unshift(order)
+        ls.set('bb_orders', orders)
+        // referral reward 5%
+        const params = new URLSearchParams(window.location.search)
+        const ref = params.get('ref') || refCode
+        const reward = total * 0.05
+        refBalances[ref] = (refBalances[ref]||0) + reward
+        ls.set('bb_ref_balances', refBalances)
+        renderAll()
+        alert('Заказ создан (mock). Реферальный бонус: ' + reward.toFixed(2) + ' ₽')
+      }
+    })
+
+    function renderOrders(){
+      ordersEl.innerHTML = ''
+      if(!orders.length) { ordersEl.innerHTML = '<div class="muted">Нет заказов</div>'; return }
+      orders.forEach(o=>{
+        const d = document.createElement('div')
+        d.style.padding='8px'; d.style.borderBottom='1px solid rgba(255,255,255,0.03)'
+        d.innerHTML = `<div style="font-weight:700">${o.title} — ${o.q} шт</div><div class=\
